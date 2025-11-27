@@ -17,7 +17,17 @@ const GifsApp = () => {
   };
 
   const handleSeacrch = (term: string) => {
-    console.log(`Search for: ${term}`);
+    const normalized = term.trim();
+    if (!normalized) return;
+
+    setPreviousTerms((prev) => {
+      // si ya existe, lo movemos al inicio
+      if (prev.includes(normalized)) {
+        return [normalized, ...prev.filter((t) => t !== normalized)];
+      }
+      // si no existe, lo agregamos al inicio y limitamos a 10
+      return [normalized, ...prev].slice(0, 10);
+    });
   };
 
   return (
@@ -27,7 +37,7 @@ const GifsApp = () => {
         descripcion="Descubre y comparte el gift perfecto"
       />
 
-      <Search placeholder="Buscar gifs..." />
+      <Search placeholder="Buscar gifs..." executeSearch={handleSeacrch} />
 
       <PreviousSearches
         previousSearches={previousTerms}
