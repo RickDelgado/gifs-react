@@ -4,8 +4,11 @@ import PreviousSearches from "./gifs/components/PreviousSearches";
 import { mockGifs } from "./mock-data/gifs.mock";
 import CustomHeader from "./shared/components/CustomHeader";
 import Search from "./shared/components/Search";
+import { fetchRandomGifUrl } from "./gifs/services/GifApi";
 
 const GifsApp = () => {
+  fetchRandomGifUrl().then((url) => console.log("Random GIF URL:", url));
+
   const [previousTerms, setPreviousTerms] = useState<string[]>([
     "cats",
     "dogs",
