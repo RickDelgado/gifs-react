@@ -1,13 +1,16 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import GifList from "./gifs/components/GifList";
 import PreviousSearches from "./gifs/components/PreviousSearches";
-import { mockGifs } from "./mock-data/gifs.mock";
+import { mockGifs, type Gif } from "./mock-data/gifs.mock";
 import CustomHeader from "./shared/components/CustomHeader";
 import Search from "./shared/components/Search";
 import { fetchRandomGifUrl } from "./gifs/services/GifApi";
 
 const GifsApp = () => {
-  fetchRandomGifUrl().then((url) => console.log("Random GIF URL:", url));
+  const [gifs, setGifs] = useState<Gif[]>([]);
+  useEffect(() => {
+    fetchRandomGifUrl("").then((urls) => setGifs(urls));
+  }, []);
 
   const [previousTerms, setPreviousTerms] = useState<string[]>([
     "cats",
@@ -31,6 +34,8 @@ const GifsApp = () => {
       // si no existe, lo agregamos al inicio y limitamos a 10
       return [normalized, ...prev].slice(0, 10);
     });
+
+    fetchRandomGifUrl(normalized).then((urls) => setGifs(urls));
   };
 
   return (
@@ -47,7 +52,7 @@ const GifsApp = () => {
         onLabelClicked={handleTermClicked}
       />
 
-      <GifList gifs={mockGifs} />
+      <GifList gifs={gifs} />
     </>
   );
 };
