@@ -45,7 +45,7 @@ const GifsApp = () => {
         descripcion="Descubre y comparte el gift perfecto"
       />
 
-      <Search placeholder="Buscar gifs..." executeSearch={handleSeacrch} />
+      <Search placeholder="Buscar gifs..." onQuery={handleSeacrch} />
 
       <PreviousSearches
         previousSearches={previousTerms}

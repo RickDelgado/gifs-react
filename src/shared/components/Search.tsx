@@ -1,34 +1,35 @@
+import { useState } from "react";
+
 interface SearchProps {
   placeholder: string;
-  executeSearch: (term: string) => void;
+  onQuery: (term: string) => void;
 }
 
-const Search = ({ placeholder = "Buscar", executeSearch }: SearchProps) => {
-  let searchInput: HTMLInputElement | null = null;
+const Search = ({ placeholder = "Buscar", onQuery }: SearchProps) => {
+  const [query, setQuery] = useState("");
+
+  const handleSearch = () => {
+    const normalized = query.trim();
+    if (!normalized) return;
+    onQuery(normalized);
+    setQuery("");
+  };
+
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter") handleSearch();
+  };
 
   return (
     <div className="search-container content-center">
       <input
-        ref={(el) => {
-          searchInput = el;
-        }}
-        onKeyDown={(e) => {
-          if (e.key === "Enter") {
-            const val = searchInput ? searchInput.value.trim() : "";
-            if (val.length > 3) {
-              executeSearch(val);
-            }
-          }
-        }}
         type="text"
         placeholder={placeholder}
         className="input-search"
+        value={query}
+        onChange={(event) => setQuery(event.target.value)}
+        onKeyDown={handleKeyDown}
       />
-      <button
-        onClick={() => executeSearch(searchInput ? searchInput.value : "")}
-      >
-        Buscar
-      </button>
+      <button onClick={handleSearch}>Buscar</button>
     </div>
   );
 };
