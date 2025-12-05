@@ -1,28 +1,21 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import GifList from "./gifs/components/GifList";
 import PreviousSearches from "./gifs/components/PreviousSearches";
-import { mockGifs, type Gif } from "./mock-data/gifs.mock";
 import CustomHeader from "./shared/components/CustomHeader";
 import Search from "./shared/components/Search";
-import { fetchRandomGifUrl } from "./gifs/services/GifApi";
+import { getGifsByQuery } from "./gifs/actions/get-gifs-by-query.action";
+import type { Gif } from "./gifs/interfaces/gif.interface";
 
 const GifsApp = () => {
   const [gifs, setGifs] = useState<Gif[]>([]);
-  useEffect(() => {
-    fetchRandomGifUrl("").then((urls) => setGifs(urls));
-  }, []);
 
-  const [previousTerms, setPreviousTerms] = useState<string[]>([
-    "cats",
-    "dogs",
-    "memes",
-  ]);
+  const [previousTerms, setPreviousTerms] = useState<string[]>([]);
 
   const handleTermClicked = (term: string) => {
     console.log(`Term clicked: ${term}`);
   };
 
-  const handleSeacrch = (term: string) => {
+  const handleSeacrch = async (term: string) => {
     const normalized = term.trim();
     if (!normalized) return;
 
@@ -35,7 +28,9 @@ const GifsApp = () => {
       return [normalized, ...prev].slice(0, 10);
     });
 
-    fetchRandomGifUrl(normalized).then((urls) => setGifs(urls));
+    await getGifsByQuery(normalized);
+
+    getGifsByQuery(normalized).then((urls) => setGifs(urls));
   };
 
   return (
