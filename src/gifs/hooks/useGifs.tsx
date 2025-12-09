@@ -1,12 +1,14 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { getGifsByQuery } from "../actions/get-gifs-by-query.action";
 import type { Gif } from "../interfaces/gif.interface";
 
-const gifsCache: Record<string, Gif[]> = {};
+// const gifsCache: Record<string, Gif[]> = {};
 
 const useGifs = () => {
   const [gifs, setGifs] = useState<Gif[]>([]);
   const [previousTerms, setPreviousTerms] = useState<string[]>([]);
+
+  const gifsCache = useRef<Record<string, Gif[]>>({}).current;
 
   const handleTermClicked = (term: string) => {
     setGifs(gifsCache[term]);
