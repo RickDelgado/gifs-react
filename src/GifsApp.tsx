@@ -5,7 +5,7 @@ import Search from "./shared/components/Search";
 
 import useGifs from "./gifs/hooks/useGifs";
 
-const GifsApp = () => {
+export const GifsApp = () => {
   const { gifs, previousTerms, handleTermClicked, handleSeacrch } = useGifs();
 
   return (
@@ -26,5 +26,3 @@ const GifsApp = () => {
     </>
   );
 };
-
-export default GifsApp;
